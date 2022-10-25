@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         uderscored: true, 
     });
     User.associate = (models) => {
-        User.hasMany(models.blogPost, {
+        User.hasMany(models.BlogPost, {
             as: 'blog_posts',
             foreingKey: 'user_id'
         })
