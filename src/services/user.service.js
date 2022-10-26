@@ -32,9 +32,12 @@ const usersList = async () => {
 
 const userById = async (id) => {
     const user = await User.findByPk(id);
+    if (!user || user === null) {
+        return { type: 'MISSING_USER', message: 'User does not exist' };
+    }
     const { displayName, email, image } = user;
     const idNumber = Number(id);
-    return { ttpe: null, message: { idNumber, displayName, email, image } };
+    return { ttpe: null, message: { id: idNumber, displayName, email, image } };
 };
 
 module.exports = {

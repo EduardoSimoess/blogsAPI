@@ -29,7 +29,8 @@ const returnUsersList = async (_req, res) => {
 
 const returnUser = async (req, res) => {
     const { id } = req.params;
-    const { message } = await userById(id);
+    const { type, message } = await userById(id);
+    if (type) return res.status(erroMap(type)).json({ message });
     return res.status(200).json(message);
 };
 
