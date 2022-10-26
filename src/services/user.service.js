@@ -30,8 +30,16 @@ const usersList = async () => {
         return list;
 };
 
+const userById = async (id) => {
+    const user = await User.findByPk(id);
+    const { displayName, email, image } = user;
+    const idNumber = Number(id);
+    return { ttpe: null, message: { idNumber, displayName, email, image } };
+};
+
 module.exports = {
     login,
     createUser,
     usersList,
+    userById,
 };

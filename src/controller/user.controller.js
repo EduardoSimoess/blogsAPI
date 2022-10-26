@@ -1,4 +1,4 @@
-const { login, createUser, usersList } = require('../services/user.service');
+const { login, createUser, usersList, userById } = require('../services/user.service');
 const erroMap = require('../utils/erroMap');
 const { User } = require('../models');
 
@@ -22,13 +22,20 @@ const returnNewUser = async (req, res) => {
     return res.status(201).json({ token: message });
 };
 
-const returnUsersList = async (req, res) => {
+const returnUsersList = async (_req, res) => {
     const { message } = await usersList();
     res.status(200).json(message);
+};
+
+const returnUser = async (req, res) => {
+    const { id } = req.params;
+    const { message } = await userById(id);
+    return res.status(200).json(message);
 };
 
 module.exports = {
     returnLogin,
     returnNewUser,
     returnUsersList,
+    returnUser,
 };
