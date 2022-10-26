@@ -18,7 +18,20 @@ const createUser = async ({ id, displayName, email, password, image }) => {
     return { type: null, message: token };
 };
 
+const usersList = async () => {
+    const list = await User.findAll();
+    if (list.length > 1) {
+        const message = list.map((user) => {
+           const { id, displayName, email, image } = user;
+            return { id, displayName, email, image };
+        });
+        return { type: null, message };
+    } 
+        return list;
+};
+
 module.exports = {
     login,
     createUser,
+    usersList,
 };

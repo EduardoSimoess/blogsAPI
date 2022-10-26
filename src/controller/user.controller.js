@@ -1,4 +1,4 @@
-const { login, createUser } = require('../services/user.service');
+const { login, createUser, usersList } = require('../services/user.service');
 const erroMap = require('../utils/erroMap');
 const { User } = require('../models');
 
@@ -14,7 +14,6 @@ const returnNewUser = async (req, res) => {
     const userList = await User.findAll();
     const last = userList.length - 1;
     let id = 1;
-    // console.log(userList[last]);
     if (userList[last]) {
          id = userList[last].id + 1;
     }
@@ -23,7 +22,13 @@ const returnNewUser = async (req, res) => {
     return res.status(201).json({ token: message });
 };
 
+const returnUsersList = async (req, res) => {
+    const { message } = await usersList();
+    res.status(200).json(message);
+};
+
 module.exports = {
     returnLogin,
     returnNewUser,
+    returnUsersList,
 };
