@@ -23,6 +23,5 @@ module.exports = (sequelize, DataTypes) => {
             otherKey: 'category_id'  
         })
     }
-
     return PostCategory;
 }
