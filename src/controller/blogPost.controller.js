@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { createBlogPost, postList } = require('../services/blogPost.service');
+const { createBlogPost, postList, postById } = require('../services/blogPost.service');
 const { User } = require('../models');
 require('dotenv/config');
 const erroMap = require('../utils/erroMap');
@@ -25,7 +25,15 @@ const returnPostList = async (_req, res) => {
     res.status(200).json(message);
 };
 
+const returnPost = async (req, res) => {
+    const { id } = req.params;
+    const { type, message } = await postById(id);
+    if (type) return res.status(erroMap(type)).json({ message });
+    res.status(200).json(message);
+};
+
 module.exports = {
     returnNewBlogPost,
     returnPostList,
+    returnPost,
 };

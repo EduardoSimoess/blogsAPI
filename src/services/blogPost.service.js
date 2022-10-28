@@ -2,17 +2,12 @@ const { BlogPost, User, Category, PostCategory } = require('../models');
 const { validationBlogPost } = require('./validations/blogPost.validation');
 
 const createBlogPost = async ({ title, content, userId, categoryIds }) => {
-    // console.log('hello');
     const validation = await validationBlogPost(title, content, categoryIds);
     if (validation) return validation;
 
     const obj = { title, content, userId, published: new Date(), updated: new Date() };
     const x = await BlogPost.create(obj);
     const { id } = x;
-    // const firts = categoryIds[0];
-    // const second = categoryIds[1];
-    // await PostCategory.create({ postId: id, categoryId: firts });
-    // await PostCategory.create({ postId: id, categoryId: second });
     const resolvedPrommise = categoryIds
     .map((categoty) => PostCategory.create({ postId: id, categoryId: categoty }));
     const pro = await Promise.all(resolvedPrommise);
@@ -29,12 +24,23 @@ const postList = async () => {
     ],
    },
 );
-   const message = list.map((m) => m.dataValues);
-   console.log(message);
    return { type: null, message: list };
+};
+
+const postById = async (id) => {
+    const list = await BlogPost.findByPk(id,
+        { attributes: { exclude: ['UserId'] },
+         include: [
+                { model: User, as: 'user', attributes: ['id', 'displayName', 'email', 'image'] },
+                { model: Category, as: 'categories', attributes: ['id', 'name'] },
+            ],
+           });
+        if (!list) return { type: 'MISSING_USER', message: 'Post does not exist' };
+        return { type: null, message: list };
 };
 
 module.exports = {
     createBlogPost,
     postList,
+    postById,
 };
