@@ -8,12 +8,15 @@ const createBlogPost = async ({ title, content, userId, categoryIds }) => {
 
     const obj = { title, content, userId, published: new Date(), updated: new Date() };
     const x = await BlogPost.create(obj);
-    console.log(x.id);
     const { id } = x;
-    const firts = categoryIds[0];
-    const second = categoryIds[1];
-    await PostCategory.create({ postId: id, categoryId: firts });
-    await PostCategory.create({ postId: id, categoryId: second });
+    // const firts = categoryIds[0];
+    // const second = categoryIds[1];
+    // await PostCategory.create({ postId: id, categoryId: firts });
+    // await PostCategory.create({ postId: id, categoryId: second });
+    const resolvedPrommise = categoryIds
+    .map((categoty) => PostCategory.create({ postId: id, categoryId: categoty }));
+    const pro = await Promise.all(resolvedPrommise);
+    console.log(pro);
     return { type: null, message: x };
 };
 
