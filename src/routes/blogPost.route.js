@@ -8,6 +8,8 @@ const tokenMiddleware = require('../middlewares/tokenMiddleware');
 
 router.post('/', tokenMiddleware, blogPostController.returnNewBlogPost);
 
+router.put('/:id', tokenMiddleware, blogPostController.returnUpdated);
+
 router.get('/:id', tokenMiddleware, blogPostController.returnPost);
 
 router.get('/', tokenMiddleware, blogPostController.returnPostList);

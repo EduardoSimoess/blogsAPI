@@ -1,5 +1,8 @@
+const jwt = require('jsonwebtoken');
 const { BlogPost, User, Category, PostCategory } = require('../models');
 const { validationBlogPost } = require('./validations/blogPost.validation');
+
+const secret = process.env.JWT_SECRET || 'mySecret';
 
 const createBlogPost = async ({ title, content, userId, categoryIds }) => {
     const validation = await validationBlogPost(title, content, categoryIds);
@@ -39,8 +42,27 @@ const postById = async (id) => {
         return { type: null, message: list };
 };
 
+const updatePost = async (id, title, content, authorization) => {
+    if (!title || !content) {
+        return { type: 'MISSING_PROP', message: 'Some required fields are missing' }; 
+}
+const decoded = jwt.verify(authorization, secret);
+const userEmail = decoded.data.email;
+const user = await User.findOne({ where: { email: userEmail } });
+const idUser = user.dataValues.id;
+let { message } = await postById(id);
+if (idUser !== message.userId) return { type: 'INVALID_USER', message: 'Unauthorized user' };
+await BlogPost.update(
+    { title, content },
+    { where: { id } },
+    );
+    message = await (await postById(id)).message;
+    return { type: null, message };
+};
+
 module.exports = {
     createBlogPost,
     postList,
     postById,
+    updatePost,
 };
