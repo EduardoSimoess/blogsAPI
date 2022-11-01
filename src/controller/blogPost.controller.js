@@ -59,7 +59,6 @@ const returnSearch = async (req, res) => {
     const array = await searchPost(q);
     res.status(200).json(array);
 };
-
 module.exports = {
     returnNewBlogPost,
     returnPostList,
