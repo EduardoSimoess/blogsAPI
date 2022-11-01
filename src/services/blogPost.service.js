@@ -71,10 +71,17 @@ if (idUser !== message.userId) return { type: 'INVALID_USER', message: 'Unauthor
 await BlogPost.destroy({ where: { id } });
 };
 
+const searchPost = async (q) => {
+    const list = (await postList()).message;
+    const message = list.filter((p) => p.title.includes(q) || p.content.includes(q));
+    return message;
+};
+
 module.exports = {
     createBlogPost,
     postList,
     postById,
     updatePost,
     deletePost,
+    searchPost,
 };
