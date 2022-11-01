@@ -60,9 +60,22 @@ await BlogPost.update(
     return { type: null, message };
 };
 
+const deletePost = async (id, authorization) => {
+const decoded = jwt.verify(authorization, secret);
+const userEmail = decoded.data.email;
+const user = await User.findOne({ where: { email: userEmail } });
+const idUser = user.dataValues.id;
+const { type, message } = await postById(id);
+// console.log(type);
+if (type) return { type: 'POST_DOES_NOT_EXIST', message: 'Post does not exist' };
+if (idUser !== message.userId) return { type: 'INVALID_USER', message: 'Unauthorized user' };
+await BlogPost.destroy({ where: { id } });
+};
+
 module.exports = {
     createBlogPost,
     postList,
     postById,
     updatePost,
+    deletePost,
 };
