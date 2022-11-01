@@ -1,6 +1,9 @@
+const jwt = require('jsonwebtoken');
 const { validateLogin, validateNewUser } = require('./validations/user.validation');
 const { createToken } = require('../utils/jwt.utils');
 const { User } = require('../models');
+
+const secret = process.env.JWT_SECRET || 'mySecret';
 
 const login = async (email, password) => {
     const e = await validateLogin(email, password);
@@ -40,9 +43,18 @@ const userById = async (id) => {
     return { ttpe: null, message: { id: idNumber, displayName, email, image } };
 };
 
+const deleteUser = async (authorization) => {
+    const decoded = jwt.verify(authorization, secret);
+    const userEmail = decoded.data.email;
+    const user = await User.findOne({ where: { email: userEmail } });
+    const { id } = user.dataValues;
+    await User.destroy({ where: { id } });
+};
+
 module.exports = {
     login,
     createUser,
     usersList,
     userById,
+    deleteUser,
 };

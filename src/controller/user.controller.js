@@ -1,4 +1,4 @@
-const { login, createUser, usersList, userById } = require('../services/user.service');
+const { login, createUser, usersList, userById, deleteUser } = require('../services/user.service');
 const erroMap = require('../utils/erroMap');
 const { User } = require('../models');
 
@@ -34,9 +34,16 @@ const returnUser = async (req, res) => {
     return res.status(200).json(message);
 };
 
+const returnDelete = async (req, res) => {
+    const { authorization } = req.headers;
+    await deleteUser(authorization);
+    res.status(204).json(null);
+};
+
 module.exports = {
     returnLogin,
     returnNewUser,
     returnUsersList,
     returnUser,
+    returnDelete,
 };
