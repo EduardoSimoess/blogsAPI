@@ -53,12 +53,12 @@ const deleted = async (req, res) => {
     }
     res.status(204).json(null);
 };
-
 const returnSearch = async (req, res) => {
     const { q } = req.query;
     const array = await searchPost(q);
     res.status(200).json(array);
 };
+
 module.exports = {
     returnNewBlogPost,
     returnPostList,
