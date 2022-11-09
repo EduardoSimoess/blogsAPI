@@ -29,7 +29,11 @@ const returnPostList = async (_req, res) => {
 
 const returnPost = async (req, res) => {
     const { id } = req.params;
+    // console.log(id);
     const { type, message } = await postById(id);
+    // const type = null;
+    // const message = id;
+    console.log('aqui');
     if (type) return res.status(erroMap(type)).json({ message });
     res.status(200).json(message);
 };

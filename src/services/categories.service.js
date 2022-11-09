@@ -1,8 +1,8 @@
 const { Category } = require('../models');
 
-const createCategory = async (id, name) => {
+const createCategory = async (name) => {
     if (!name) return { type: 'MISSING_PROP', message: '"name" is required' };
-    Category.create(({ id, name }));
+    const { id } = await Category.create(({ name }));
     return { type: null, message: { id, name } };
 };
 
