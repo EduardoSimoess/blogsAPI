@@ -12,10 +12,10 @@ const login = async (email, password) => {
     return { type: null, message: token };
 };
 
-const createUser = async ({ id, displayName, email, password, image }) => {
+const createUser = async ({ displayName, email, password, image }) => {
     const e = await validateNewUser(displayName, email, password);
     if (e) return e;
-    User.create({ id, displayName, email, password, image });
+    User.create({ displayName, email, password, image });
     
     const token = createToken({ displayName, email, password, image });
     return { type: null, message: token };
